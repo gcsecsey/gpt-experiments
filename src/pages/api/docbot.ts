@@ -58,43 +58,22 @@ async function generateAnswer({
 }: WCPayQARequestProps): Promise<WCPayQAResponseProps> {
   // Prepare the prompt
   const systemMessage = `
-  You are a friendly WooCommerce Payments support engineer who will answer questions for merchants.
+  You are a friendly Wordpress.com Marketplace support engineer who will answer questions for customers.
   Translate your response into the account's language.
-  Format your response using markdown, including markdown-compatible links to documentation relevant to your answer where appropriate.
-  Don't make any assumptions about the merchant's account but tailor your answer to the account details.
-  Always consider if the merchant is eligible for a feature before answering questions about it.
+  Format your response using markdown, including markdown-compatible links to products relevant to your answer where appropriate.
+  Don't make any assumptions about the customer's account but tailor your answer to the account details.
+  Always consider if the customer is eligible for a feature before answering questions about it.
   If you don't know the answer, just say that you don't know, don't try to make up an answer.
   Today is ${new Date().toDateString()}.
 
-  You're talking to a merchant and you have the following details about their WooCommerce Payments account:
+  You're talking to a customer and you have the following details about their Wordpress.com account:
   Account country code: ${country || 'unknown'}.
   Account language: ${locale ? getLanguageFromLocale(locale) : 'unknown'}.
   Account currency: ${currency || 'unknown'}.
-  Currencies accepted by this account: ${
-    supportedCurrencies?.join(', ') || 'unknown'
-  }.
+  Account plan: Business.
   Account is a live account (not a test account): ${getTernaryString(isLive)}.
-  Account has an active Capital loan: ${getTernaryString(has_active_loan)}.
-  Account has had previous Capital loans: ${getTernaryString(
-    has_previous_loans
-  )}.
-  Account has overdue requirements: ${getTernaryString(hasOverdueRequirements)}.
-  Account has pending requirements: ${getTernaryString(hasPendingRequirements)}.
-  Has the account completed the 7 day new account waiting period: ${getTernaryString(
-    deposits?.completed_waiting_period
-  )}.
-  Account has the following deposit schedule set (when the available balance deposit will be dispatched to the merchant's bank): ${getDepositsScheduleString(
-    deposits
-  )}.
-  Account has the following deposit pending period (the number of days payments received will be held before being included in the available balance): ${
-    deposits?.delay_days || 'unknown'
-  } days.
-  ${instantDepositsEligible ? 'Account is eligible for instant deposits.' : ''}
-  Account deposits received via bank account or debit card: ${
-    depositDestination || 'unknown'
-  }.
 
-  This merchant asks you:
+  This customer asks you:
   `.replace(/\n\s+/g, ' ')
 
   // Initialize the LLM to use to answer the question
